@@ -3,9 +3,5 @@
 version = 4
 
 [[package]]
-name = "mid2text"
-version = "0.1.0"
-
-[[package]]
 name = "mid_text_converter"
 version = "0.1.0"
