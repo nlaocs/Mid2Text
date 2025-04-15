@@ -3,4 +3,9 @@ name = "mid_text_converter"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "mid_text_converter"
+path = "src/lib.rs"
+
 [dependencies]
+midly = "0.5.3"
