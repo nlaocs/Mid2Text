@@ -1,9 +1,9 @@
-[package]
-name = "mid2text"
-version = "0.1.0"
-edition = "2024"
+#[package]
+#name = "mid2text"
+#version = "0.1.0"
+#edition = "2024"
 
-[dependencies]
+#[dependencies]
 
 [workspace]
 members = [
