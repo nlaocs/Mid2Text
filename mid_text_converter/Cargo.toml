@@ -9,3 +9,4 @@ path = "src/lib.rs"
 
 [dependencies]
 midly = "0.5.3"
+thiserror = "2.0.11"
