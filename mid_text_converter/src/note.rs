@@ -7,7 +7,7 @@ pub enum NoteError {
     InvalidKey(u8),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Note {
     pub key: u7,
     pub start_timing: u32,
