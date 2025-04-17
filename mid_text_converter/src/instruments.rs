@@ -18,7 +18,7 @@ impl Track {
         self.0.sort_by(|a, b| a.start_timing.cmp(&b.start_timing));
     }
 
-    pub fn midi_to_notes(midi: &midly::Smf) -> Self {
+    pub fn midi_to_track(midi: &midly::Smf) -> Self {
         let tracks: Vec<Vec<&midly::TrackEvent>> = midi.tracks
             .iter()
             .map(|track| {
