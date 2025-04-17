@@ -5,6 +5,7 @@ use midly::num::u7;
 use thiserror::Error;
 use crate::utils;
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct Track(pub Vec<Note>);
 
 impl Track {
