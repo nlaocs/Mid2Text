@@ -7,5 +7,6 @@
 
 [workspace]
 members = [
+    "mid2text_cli",
     "mid_text_converter",
 ]
