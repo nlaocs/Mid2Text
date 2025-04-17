@@ -167,12 +167,23 @@ impl Instruments {
                     current_time = note.start_timing;
                     write!(&mut result, "{}", utils::tick_to_string(ticks))?;
 
-                    if note.key.as_int() >= 78 && note.key.as_int() <= 102 { // octave up
-                        write!(&mut result, "+{}", note.to_char(relative_move)?)?;
-                    }  else if note.key.as_int() <= 54 && note.key.as_int() >= 30 { // octave down
-                        write!(&mut result, "-{}", note.to_char(relative_move)?)?;
+                    // todo refactor
+                    if relative_move {
+                        if note.key.as_int() >= 78 { // octave up
+                            write!(&mut result, "+{}", Note::key_to_char(note.key.as_int() - 24, relative_move)?)?;
+                        } else if note.key.as_int() <= 54 { // octave down
+                            write!(&mut result, "-{}", Note::key_to_char(note.key.as_int() + 24, relative_move)?)?;
+                        } else {
+                            write!(&mut result, "{}", note.to_char(relative_move)?)?;
+                        }
                     } else {
-                        write!(&mut result, "{}", note.to_char(relative_move)?)?;
+                        if note.key.as_int() >= 78 && note.key.as_int() <= 102 { // octave up
+                            write!(&mut result, "+{}", Note::key_to_char(note.key.as_int() - 24, relative_move)?)?;
+                        }  else if note.key.as_int() <= 54 && note.key.as_int() >= 30 { // octave down
+                            write!(&mut result, "-{}", Note::key_to_char(note.key.as_int() + 24, relative_move)?)?;
+                        } else {
+                            write!(&mut result, "{}", note.to_char(relative_move)?)?;
+                        }
                     }
                 }
                 Ok(result)
@@ -215,11 +226,11 @@ fn test_instrument_to_text() {
     let mut track = Track::new();
     track.0.push(Note::new(u7::from(60), 0));
     track.0.push(Note::new(u7::from(62), 1));
-    track.0.push(Note::new(u7::from(64), 2));
+    track.0.push(Note::new(u7::from(127), 2));
 
     let mut instrument = Instruments::new(InstrumentKind::Pling, track);
-    let result = instrument.to_text(false).unwrap();
-    assert_eq!(result, "G.I.K");
+    let result = instrument.to_text(true).unwrap();
+    assert_eq!(result, "G.I.+N");
 }
 
 #[test]
@@ -230,15 +241,31 @@ fn test_merge_instruments() {
 
     let mut track2 = Track::new();
     track2.0.push(Note::new(u7::from(64), 2));
-    track2.0.push(Note::new(u7::from(65), 3));
+    track2.0.push(Note::new(u7::from(113), 3));
 
     let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
     let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
 
     instrument1.merge(instrument2).unwrap();
 
-    let result = instrument1.to_text(false).unwrap();
-    assert_eq!(result, "G.I.K.L");
+    let result = instrument1.to_text(true).unwrap();
+    assert_eq!(result, "G.I.K.+X");
+
+    let mut track1 = Track::new();
+    track1.0.push(Note::new(u7::from(60), 0));
+    track1.0.push(Note::new(u7::from(62), 1));
+
+    let mut track2 = Track::new();
+    track2.0.push(Note::new(u7::from(112), 2));
+    track2.0.push(Note::new(u7::from(125), 3));
+
+    let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
+    let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
+
+    instrument1.merge(instrument2).unwrap();
+
+    let result = instrument1.to_text(true).unwrap();
+    assert_eq!(result, "G.I.+W.+X");
 }
 
 #[test]
