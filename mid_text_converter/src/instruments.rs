@@ -1,7 +1,6 @@
 use crate::note::{Note};
 use std::fmt::Write;
 use std::mem;
-use midly::num::u7;
 use thiserror::Error;
 use crate::utils;
 
@@ -223,65 +222,71 @@ impl Instruments {
 
 }
 
-#[test]
-fn test_instrument_to_text() {
-    let mut track = Track::new();
-    track.0.push(Note::new(u7::from(60), 0));
-    track.0.push(Note::new(u7::from(62), 1));
-    track.0.push(Note::new(u7::from(127), 2));
+#[cfg(test)]
+mod tests {
+    use crate::note::Note;
+    use midly::num::u7;
+    use crate::instruments::{InstrumentKind, Instruments, Track};
+    #[test]
+    fn test_instrument_to_text() {
+        let mut track = Track::new();
+        track.0.push(Note::new(u7::from(60), 0));
+        track.0.push(Note::new(u7::from(62), 1));
+        track.0.push(Note::new(u7::from(127), 2));
 
-    let mut instrument = Instruments::new(InstrumentKind::Pling, track);
-    let result = instrument.to_text(true).unwrap();
-    assert_eq!(result, "G.I.+N");
-}
+        let mut instrument = Instruments::new(InstrumentKind::Pling, track);
+        let result = instrument.to_text(true).unwrap();
+        assert_eq!(result, "G.I.+N");
+    }
 
-#[test]
-fn test_merge_instruments() {
-    let mut track1 = Track::new();
-    track1.0.push(Note::new(u7::from(60), 0));
-    track1.0.push(Note::new(u7::from(62), 1));
+    #[test]
+    fn test_merge_instruments() {
+        let mut track1 = Track::new();
+        track1.0.push(Note::new(u7::from(60), 0));
+        track1.0.push(Note::new(u7::from(62), 1));
 
-    let mut track2 = Track::new();
-    track2.0.push(Note::new(u7::from(64), 2));
-    track2.0.push(Note::new(u7::from(113), 3));
+        let mut track2 = Track::new();
+        track2.0.push(Note::new(u7::from(64), 2));
+        track2.0.push(Note::new(u7::from(113), 3));
 
-    let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
-    let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
+        let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
+        let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
 
-    instrument1.merge(instrument2).unwrap();
+        instrument1.merge(instrument2).unwrap();
 
-    let result = instrument1.to_text(true).unwrap();
-    assert_eq!(result, "G.I.K.+X");
+        let result = instrument1.to_text(true).unwrap();
+        assert_eq!(result, "G.I.K.+X");
 
-    let mut track1 = Track::new();
-    track1.0.push(Note::new(u7::from(60), 0));
-    track1.0.push(Note::new(u7::from(62), 1));
+        let mut track1 = Track::new();
+        track1.0.push(Note::new(u7::from(60), 0));
+        track1.0.push(Note::new(u7::from(62), 1));
 
-    let mut track2 = Track::new();
-    track2.0.push(Note::new(u7::from(112), 2));
-    track2.0.push(Note::new(u7::from(125), 3));
+        let mut track2 = Track::new();
+        track2.0.push(Note::new(u7::from(112), 2));
+        track2.0.push(Note::new(u7::from(125), 3));
 
-    let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
-    let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
+        let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
+        let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
 
-    instrument1.merge(instrument2).unwrap();
+        instrument1.merge(instrument2).unwrap();
 
-    let result = instrument1.to_text(true).unwrap();
-    assert_eq!(result, "G.I.+W.+X");
-}
+        let result = instrument1.to_text(true).unwrap();
+        assert_eq!(result, "G.I.+W.+X");
+    }
 
-#[test]
-fn test_merge_different_instruments() {
-    let mut track1 = Track::new();
-    track1.0.push(Note::new(u7::from(60), 0));
-    track1.0.push(Note::new(u7::from(62), 1));
+    #[test]
+    fn test_merge_different_instruments() {
+        let mut track1 = Track::new();
+        track1.0.push(Note::new(u7::from(60), 0));
+        track1.0.push(Note::new(u7::from(62), 1));
 
-    let mut track2 = Track::new();
-    track2.0.push(Note::new(u7::from(64), 2));
-    track2.0.push(Note::new(u7::from(65), 3));
+        let mut track2 = Track::new();
+        track2.0.push(Note::new(u7::from(64), 2));
+        track2.0.push(Note::new(u7::from(65), 3));
 
-    let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
-    let instrument2 = Instruments::new(InstrumentKind::Hat, track2);
+        let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
+        let instrument2 = Instruments::new(InstrumentKind::Hat, track2);
 
-    assert!(instrument1.merge(instrument2).is_err());
+        assert!(instrument1.merge(instrument2).is_err());
+    }
 }

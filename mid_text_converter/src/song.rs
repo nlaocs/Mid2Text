@@ -1,6 +1,4 @@
-use midly::num::u7;
-use crate::instruments::{InstrumentKind, Instruments, Track};
-use crate::note::Note;
+use crate::instruments::Instruments;
 use crate::utils;
 
 pub struct Song {
@@ -33,31 +31,36 @@ impl Default for Song {
     }
 }
 
-#[test]
-fn test_song() {
-    let mut song = Song::new();
-
-    let mut track1 = Track::new();
-    track1.0.push(Note::new(u7::from(60), 0));
-    track1.0.push(Note::new(u7::from(62), 1));
-
-    let mut track2 = Track::new();
-    track2.0.push(Note::new(u7::from(112), 2));
-    track2.0.push(Note::new(u7::from(125), 3));
-
-    let instrument1 = Instruments::new(InstrumentKind::Flute, track1);
-    let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
-
-    song.add_track(instrument1);
-    song.add_track(instrument2);
-    let result = song.to_text(true).unwrap();
-    assert_eq!(result, "@G.@I.+W.+X");
-}
-
-pub mod mid {
-    use midly::num::u7;
-    use crate::instruments::Track;
+#[cfg(test)]
+mod tests {
     use crate::note::Note;
+    use midly::num::u7;
+    use crate::instruments::{InstrumentKind, Instruments, Track};
+    use crate::song::Song;
+
+    #[test]
+    fn test_song() {
+        let mut song = Song::new();
+
+        let mut track1 = Track::new();
+        track1.0.push(Note::new(u7::from(60), 0));
+        track1.0.push(Note::new(u7::from(62), 1));
+
+        let mut track2 = Track::new();
+        track2.0.push(Note::new(u7::from(112), 2));
+        track2.0.push(Note::new(u7::from(125), 3));
+
+        let instrument1 = Instruments::new(InstrumentKind::Flute, track1);
+        let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
+
+        song.add_track(instrument1);
+        song.add_track(instrument2);
+        let result = song.to_text(true).unwrap();
+        assert_eq!(result, "@G.@I.+W.+X");
+    }
+}
+pub mod mid {
+    use crate::instruments::Track;
 
     pub fn mid_to_track(path: &str) -> Result<Track, Box<dyn std::error::Error>> {
         let data = std::fs::read(path)?;
@@ -67,21 +70,29 @@ pub mod mid {
 
     }
 
-    #[test]
-    fn test_mid_to_track() {
-        let track = mid_to_track("./one_octave.mid").unwrap();
+    #[cfg(test)]
+    mod tests {
+        use crate::note::Note;
+        use midly::num::u7;
+        use crate::instruments::Track;
+        use crate::song::mid::mid_to_track;
 
-        let mut track2 = Track::new();
-        track2.0.push(Note::new(u7::from(60), 0));
-        track2.0.push(Note::new(u7::from(62), 8));
-        track2.0.push(Note::new(u7::from(64), 16));
-        track2.0.push(Note::new(u7::from(65), 24));
-        track2.0.push(Note::new(u7::from(67), 32));
-        track2.0.push(Note::new(u7::from(69), 40));
-        track2.0.push(Note::new(u7::from(71), 48));
-        track2.0.push(Note::new(u7::from(72), 56));
+        #[test]
+        fn test_mid_to_track() {
+            let track = mid_to_track("./one_octave.mid").unwrap();
 
-        assert_eq!(track.0.len(), 8);
-        assert_eq!(track, track2);
+            let mut track2 = Track::new();
+            track2.0.push(Note::new(u7::from(60), 0));
+            track2.0.push(Note::new(u7::from(62), 8));
+            track2.0.push(Note::new(u7::from(64), 16));
+            track2.0.push(Note::new(u7::from(65), 24));
+            track2.0.push(Note::new(u7::from(67), 32));
+            track2.0.push(Note::new(u7::from(69), 40));
+            track2.0.push(Note::new(u7::from(71), 48));
+            track2.0.push(Note::new(u7::from(72), 56));
+
+            assert_eq!(track.0.len(), 8);
+            assert_eq!(track, track2);
+        }
     }
 }

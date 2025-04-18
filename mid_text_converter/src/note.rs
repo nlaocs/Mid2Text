@@ -39,40 +39,45 @@ impl Note {
     }
 }
 
-#[test]
-fn test_key_to_char() {
-    assert_eq!(Note::key_to_char(60, true), Ok('G'));
-    assert_eq!(Note::key_to_char(72, true), Ok('S'));
-    assert_eq!(Note::key_to_char(84, true), Ok('S'));
-    assert_eq!(Note::key_to_char(80, true), Ok('O'));
-    assert_eq!(Note::key_to_char(1, true), Ok('H'));
-
-    assert_eq!(Note::key_to_char(60, false), Ok('G'));
-    assert_eq!(Note::key_to_char(72, false), Ok('S'));
-    assert_eq!(Note::key_to_char(84, false), Err(NoteError::InvalidKey(84)));
-    assert_eq!(Note::key_to_char(80, false), Err(NoteError::InvalidKey(80)));
-    assert_eq!(Note::key_to_char(1, false), Err(NoteError::InvalidKey(1)));
-}
-
-#[test]
-fn test_to_char() {
-    let note = Note::new(u7::from(60), 0);
-    assert_eq!(note.to_char(true), Ok('G'));
-    assert_eq!(note.to_char(false), Ok('G'));
-
-    let note = Note::new(u7::from(72), 0);
-    assert_eq!(note.to_char(true), Ok('S'));
-    assert_eq!(note.to_char(false), Ok('S'));
-
-    let note = Note::new(u7::from(84), 0);
-    assert_eq!(note.to_char(true), Ok('S'));
-    assert_eq!(note.to_char(false), Err(NoteError::InvalidKey(84)));
-
-    let note = Note::new(u7::from(80), 0);
-    assert_eq!(note.to_char(true), Ok('O'));
-    assert_eq!(note.to_char(false), Err(NoteError::InvalidKey(80)));
-
-    let note = Note::new(u7::from(1), 0);
-    assert_eq!(note.to_char(true), Ok('H'));
-    assert_eq!(note.to_char(false), Err(NoteError::InvalidKey(1)));
+#[cfg(test)]
+mod tests {
+    use super::*;
+    
+    #[test]
+    fn test_key_to_char() {
+        assert_eq!(Note::key_to_char(60, true), Ok('G'));
+        assert_eq!(Note::key_to_char(72, true), Ok('S'));
+        assert_eq!(Note::key_to_char(84, true), Ok('S'));
+        assert_eq!(Note::key_to_char(80, true), Ok('O'));
+        assert_eq!(Note::key_to_char(1, true), Ok('H'));
+    
+        assert_eq!(Note::key_to_char(60, false), Ok('G'));
+        assert_eq!(Note::key_to_char(72, false), Ok('S'));
+        assert_eq!(Note::key_to_char(84, false), Err(NoteError::InvalidKey(84)));
+        assert_eq!(Note::key_to_char(80, false), Err(NoteError::InvalidKey(80)));
+        assert_eq!(Note::key_to_char(1, false), Err(NoteError::InvalidKey(1)));
+    }
+    
+    #[test]
+    fn test_to_char() {
+        let note = Note::new(u7::from(60), 0);
+        assert_eq!(note.to_char(true), Ok('G'));
+        assert_eq!(note.to_char(false), Ok('G'));
+    
+        let note = Note::new(u7::from(72), 0);
+        assert_eq!(note.to_char(true), Ok('S'));
+        assert_eq!(note.to_char(false), Ok('S'));
+    
+        let note = Note::new(u7::from(84), 0);
+        assert_eq!(note.to_char(true), Ok('S'));
+        assert_eq!(note.to_char(false), Err(NoteError::InvalidKey(84)));
+    
+        let note = Note::new(u7::from(80), 0);
+        assert_eq!(note.to_char(true), Ok('O'));
+        assert_eq!(note.to_char(false), Err(NoteError::InvalidKey(80)));
+    
+        let note = Note::new(u7::from(1), 0);
+        assert_eq!(note.to_char(true), Ok('H'));
+        assert_eq!(note.to_char(false), Err(NoteError::InvalidKey(1)));
+    }
 }
