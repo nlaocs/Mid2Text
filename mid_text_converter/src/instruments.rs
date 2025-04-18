@@ -180,14 +180,12 @@ impl Instruments {
                         } else {
                             write!(&mut result, "{}", note.to_char(relative_move)?)?;
                         }
+                    } else if note.key.as_int() >= 78 && note.key.as_int() <= 102 { // octave up
+                        write!(&mut result, "+{}", Note::key_to_char(note.key.as_int() - 24, relative_move)?)?;
+                    } else if note.key.as_int() <= 54 && note.key.as_int() >= 30 { // octave down
+                        write!(&mut result, "-{}", Note::key_to_char(note.key.as_int() + 24, relative_move)?)?;
                     } else {
-                        if note.key.as_int() >= 78 && note.key.as_int() <= 102 { // octave up
-                            write!(&mut result, "+{}", Note::key_to_char(note.key.as_int() - 24, relative_move)?)?;
-                        }  else if note.key.as_int() <= 54 && note.key.as_int() >= 30 { // octave down
-                            write!(&mut result, "-{}", Note::key_to_char(note.key.as_int() + 24, relative_move)?)?;
-                        } else {
-                            write!(&mut result, "{}", note.to_char(relative_move)?)?;
-                        }
+                        write!(&mut result, "{}", note.to_char(relative_move)?)?;
                     }
                 }
                 Ok(result)
