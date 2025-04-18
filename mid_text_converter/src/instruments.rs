@@ -1,11 +1,26 @@
 use crate::note::{Note};
 use std::fmt::Write;
 use std::mem;
+use std::ops::{Deref, DerefMut};
 use thiserror::Error;
 use crate::utils;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Track(pub Vec<Note>);
+
+impl Deref for Track {
+    type Target = Vec<Note>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl DerefMut for Track {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
 
 impl Track {
     pub fn new() -> Self {
@@ -13,8 +28,8 @@ impl Track {
     }
 
     pub fn merge(&mut self, mut track: Self) {
-        self.0.append(&mut track.0);
-        self.0.sort_by(|a, b| a.start_timing.cmp(&b.start_timing));
+        self.append(&mut track);
+        self.sort_by(|a, b| a.start_timing.cmp(&b.start_timing));
     }
 
     pub fn midi_to_track(midi: &midly::Smf) -> Self {
@@ -62,13 +77,13 @@ impl Track {
                         }
                     }) {
                         let note = Note::new(*key, current_time / 12);
-                        t.0.push(note);
+                        t.push(note);
                         buff_tracks.remove(index);
                     };
                 }
             }
 
-            if !t.0.is_empty() {
+            if !t.is_empty() {
                 notes.merge(t);
             }
         }
@@ -149,8 +164,8 @@ impl Instruments {
                 | (Instruments::Guitar(self_track), Instruments::Guitar(mut other_track))
                 | (Instruments::Harp(self_track), Instruments::Harp(mut other_track))
                 | (Instruments::Xylophone(self_track), Instruments::Xylophone(mut other_track)) => {
-                    self_track.0.append(&mut other_track.0);
-                    self_track.0.sort_by(|a, b| a.start_timing.cmp(&b.start_timing));
+                    self_track.append(&mut other_track);
+                    self_track.sort_by(|a, b| a.start_timing.cmp(&b.start_timing));
                 }
                 _ => unreachable!(),
             }
@@ -230,9 +245,9 @@ mod tests {
     #[test]
     fn test_instrument_to_text() {
         let mut track = Track::new();
-        track.0.push(Note::new(u7::from(60), 0));
-        track.0.push(Note::new(u7::from(62), 1));
-        track.0.push(Note::new(u7::from(127), 2));
+        track.push(Note::new(u7::from(60), 0));
+        track.push(Note::new(u7::from(62), 1));
+        track.push(Note::new(u7::from(127), 2));
 
         let mut instrument = Instruments::new(InstrumentKind::Pling, track);
         let result = instrument.to_text(true).unwrap();
@@ -242,12 +257,12 @@ mod tests {
     #[test]
     fn test_merge_instruments() {
         let mut track1 = Track::new();
-        track1.0.push(Note::new(u7::from(60), 0));
-        track1.0.push(Note::new(u7::from(62), 1));
+        track1.push(Note::new(u7::from(60), 0));
+        track1.push(Note::new(u7::from(62), 1));
 
         let mut track2 = Track::new();
-        track2.0.push(Note::new(u7::from(64), 2));
-        track2.0.push(Note::new(u7::from(113), 3));
+        track2.push(Note::new(u7::from(64), 2));
+        track2.push(Note::new(u7::from(113), 3));
 
         let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
         let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
@@ -258,12 +273,12 @@ mod tests {
         assert_eq!(result, "G.I.K.+X");
 
         let mut track1 = Track::new();
-        track1.0.push(Note::new(u7::from(60), 0));
-        track1.0.push(Note::new(u7::from(62), 1));
+        track1.push(Note::new(u7::from(60), 0));
+        track1.push(Note::new(u7::from(62), 1));
 
         let mut track2 = Track::new();
-        track2.0.push(Note::new(u7::from(112), 2));
-        track2.0.push(Note::new(u7::from(125), 3));
+        track2.push(Note::new(u7::from(112), 2));
+        track2.push(Note::new(u7::from(125), 3));
 
         let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
         let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
@@ -277,12 +292,12 @@ mod tests {
     #[test]
     fn test_merge_different_instruments() {
         let mut track1 = Track::new();
-        track1.0.push(Note::new(u7::from(60), 0));
-        track1.0.push(Note::new(u7::from(62), 1));
+        track1.push(Note::new(u7::from(60), 0));
+        track1.push(Note::new(u7::from(62), 1));
 
         let mut track2 = Track::new();
-        track2.0.push(Note::new(u7::from(64), 2));
-        track2.0.push(Note::new(u7::from(65), 3));
+        track2.push(Note::new(u7::from(64), 2));
+        track2.push(Note::new(u7::from(65), 3));
 
         let mut instrument1 = Instruments::new(InstrumentKind::Pling, track1);
         let instrument2 = Instruments::new(InstrumentKind::Hat, track2);

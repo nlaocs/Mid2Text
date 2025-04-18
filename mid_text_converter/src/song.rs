@@ -43,12 +43,12 @@ mod tests {
         let mut song = Song::new();
 
         let mut track1 = Track::new();
-        track1.0.push(Note::new(u7::from(60), 0));
-        track1.0.push(Note::new(u7::from(62), 1));
+        track1.push(Note::new(u7::from(60), 0));
+        track1.push(Note::new(u7::from(62), 1));
 
         let mut track2 = Track::new();
-        track2.0.push(Note::new(u7::from(112), 2));
-        track2.0.push(Note::new(u7::from(125), 3));
+        track2.push(Note::new(u7::from(112), 2));
+        track2.push(Note::new(u7::from(125), 3));
 
         let instrument1 = Instruments::new(InstrumentKind::Flute, track1);
         let instrument2 = Instruments::new(InstrumentKind::Pling, track2);
@@ -82,16 +82,16 @@ pub mod mid {
             let track = mid_to_track("./one_octave.mid").unwrap();
 
             let mut track2 = Track::new();
-            track2.0.push(Note::new(u7::from(60), 0));
-            track2.0.push(Note::new(u7::from(62), 8));
-            track2.0.push(Note::new(u7::from(64), 16));
-            track2.0.push(Note::new(u7::from(65), 24));
-            track2.0.push(Note::new(u7::from(67), 32));
-            track2.0.push(Note::new(u7::from(69), 40));
-            track2.0.push(Note::new(u7::from(71), 48));
-            track2.0.push(Note::new(u7::from(72), 56));
+            track2.push(Note::new(u7::from(60), 0));
+            track2.push(Note::new(u7::from(62), 8));
+            track2.push(Note::new(u7::from(64), 16));
+            track2.push(Note::new(u7::from(65), 24));
+            track2.push(Note::new(u7::from(67), 32));
+            track2.push(Note::new(u7::from(69), 40));
+            track2.push(Note::new(u7::from(71), 48));
+            track2.push(Note::new(u7::from(72), 56));
 
-            assert_eq!(track.0.len(), 8);
+            assert_eq!(track.len(), 8);
             assert_eq!(track, track2);
         }
     }
