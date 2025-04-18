@@ -81,6 +81,12 @@ impl Track {
     }
 }
 
+impl Default for Track {
+    fn default() -> Self {
+        Track::new()
+    }
+}
+
 pub enum InstrumentKind {
     Pling,
     Hat,
