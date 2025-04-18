@@ -47,28 +47,25 @@ impl Track {
 
             for track in &track {
                 current_time += track.delta.as_int();
-                match &track.kind {
-                    midly::TrackEventKind::Midi {
+                if let midly::TrackEventKind::Midi {
                         message: midly::MidiMessage::NoteOn { key, .. },
                         ..
-                    } => {
-                        if let Some(index) = buff_tracks.iter().position(|t| {
-                            if let midly::TrackEventKind::Midi {
-                                message: midly::MidiMessage::NoteOff { key: k, .. },
-                                ..
-                            } = &t.kind
-                            {
-                                key == k
-                            } else {
-                                false
-                            }
-                        }) {
-                            let note = Note::new(*key, current_time / 12);
-                            t.0.push(note);
-                            buff_tracks.remove(index);
-                        };
-                    }
-                    _ => {}
+                    } = &track.kind {
+                    if let Some(index) = buff_tracks.iter().position(|t| {
+                        if let midly::TrackEventKind::Midi {
+                            message: midly::MidiMessage::NoteOff { key: k, .. },
+                            ..
+                        } = &t.kind
+                        {
+                            key == k
+                        } else {
+                            false
+                        }
+                    }) {
+                        let note = Note::new(*key, current_time / 12);
+                        t.0.push(note);
+                        buff_tracks.remove(index);
+                    };
                 }
             }
 
