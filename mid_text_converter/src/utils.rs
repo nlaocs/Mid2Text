@@ -77,7 +77,7 @@ pub fn merge_string(tracks: &Vec<String>) -> String {
     let mut all_events = Vec::new();
 
     for track in tracks {
-        let events = parse_track(&track);
+        let events = parse_track(track);
         all_events.extend(events);
     }
 
