@@ -27,6 +27,12 @@ impl Song {
     }
 }
 
+impl Default for Song {
+    fn default() -> Self {
+        Song::new()
+    }
+}
+
 #[test]
 fn test_song() {
     let mut song = Song::new();
