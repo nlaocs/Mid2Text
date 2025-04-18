@@ -249,7 +249,7 @@ mod tests {
         track.push(Note::new(u7::from(62), 1));
         track.push(Note::new(u7::from(127), 2));
 
-        let mut instrument = Instruments::new(InstrumentKind::Pling, track);
+        let instrument = Instruments::new(InstrumentKind::Pling, track);
         let result = instrument.to_text(true).unwrap();
         assert_eq!(result, "G.I.+N");
     }
