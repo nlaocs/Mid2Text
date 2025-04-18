@@ -24,7 +24,7 @@ impl Note {
             while k < 54 { k += 12; }
             while k > 78 { k -= 12; }
             k
-        } else if key < 54 || key > 78 {
+        } else if !(54..=78).contains(&key) {
             return Err(NoteError::InvalidKey(key));
         } else {
             key
