@@ -22,7 +22,7 @@ impl Song {
         for track in &self.tracks {
             t.push(track.to_text(relative_move)?);
         }
-        Ok(utils::merge_string(t))
+        Ok(utils::merge_string(&t))
         
     }
 }

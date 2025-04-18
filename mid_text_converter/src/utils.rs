@@ -27,7 +27,7 @@ pub fn tick_to_string(ticks: u32) -> String {
     result
 }
 
-pub fn merge_string(tracks: Vec<String>) -> String {
+pub fn merge_string(tracks: &Vec<String>) -> String {
     fn parse_track(track: &str) -> Vec<(u32, char)> {
         let mut events = Vec::new();
         let mut current_tick = 0;
@@ -100,22 +100,22 @@ fn test_tick_conversion() {
 #[test]
 fn test_merge_string() {
     assert_eq!(
-        merge_string(vec!["G4I4K".to_string(), "2G4I4K".to_string()]),
+        merge_string(&vec!["G4I4K".to_string(), "2G4I4K".to_string()]),
         "G2G2I2I2K2K".to_string()
     );
 
     assert_eq!(
-        merge_string(vec!["G4I4K".to_string(), "2G4I4KA".to_string()]),
+        merge_string(&vec!["G4I4K".to_string(), "2G4I4KA".to_string()]),
         "G2G2I2I2K2KA".to_string()
     );
 
     assert_eq!(
-        merge_string(vec!["AA@.A".to_string(), "BB1B".to_string(), "CCC".to_string()]),
+        merge_string(&vec!["AA@.A".to_string(), "BB1B".to_string(), "CCC".to_string()]),
         "AA@BBCCC.A.B".to_string()
     );
 
     assert_eq!(
-        merge_string(vec!["=G9999999999999999999999999999999999999999999999997=G6=G3=G96=G9=G96=G9=G96=G".to_string(), "B1B".to_string()]),
+        merge_string(&vec!["=G9999999999999999999999999999999999999999999999997=G6=G3=G96=G9=G96=G9=G96=G".to_string(), "B1B".to_string()]),
         "=GB1B9999999999999999999999999999999999999999999999996=G6=G3=G96=G9=G96=G9=G96=G".to_string()
     );
 }
