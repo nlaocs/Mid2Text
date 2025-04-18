@@ -31,9 +31,9 @@ pub fn merge_string(tracks: &Vec<String>) -> String {
     fn parse_track(track: &str) -> Vec<(u32, char)> {
         let mut events = Vec::new();
         let mut current_tick = 0;
-        let mut chars = track.chars();
+        let chars = track.chars();
 
-        while let Some(c) = chars.next() {
+        for c in chars {
             if c.is_ascii_digit() {
                 let digit = c.to_digit(10).unwrap();
                 current_tick += digit * 2;
