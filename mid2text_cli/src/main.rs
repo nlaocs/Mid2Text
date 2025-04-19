@@ -37,7 +37,7 @@ enum Mode {
         songs: Vec<String>,
 
         /// マージした文字列をクリップボードにコピーする
-        #[arg(long)]
+        #[arg(short = 'c', long)]
         copy: bool,
     },
 }
@@ -63,7 +63,7 @@ struct InstArgs {
     #[arg(long, num_args = 0..)]
     bell: Vec<String>,
     /// chimeに変換するmidファイル
-    #[arg(short = 'c', long, num_args = 0..)]
+    #[arg(long, num_args = 0..)]
     chime: Vec<String>,
     /// fluteに変換するmidファイル
     #[arg(short = 'f', long, num_args = 0..)]
@@ -83,7 +83,7 @@ struct InstArgs {
     relative: bool,
     
     /// 作成した文字列をクリップボードにコピーする
-    #[arg(long)]
+    #[arg(short = 'c', long)]
     copy: bool,
 }
 
