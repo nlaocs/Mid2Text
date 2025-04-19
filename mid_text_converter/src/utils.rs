@@ -52,7 +52,7 @@ pub fn merge_string(tracks: &Vec<String>) -> String {
             return String::new();
         }
 
-        let mut result = String::new();
+        let mut result = String::with_capacity(events.len() * 2);
         let mut last_tick = 0;
         let mut i = 0;
 
