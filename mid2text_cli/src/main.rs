@@ -3,6 +3,7 @@ use mid_text_converter::instruments::{InstrumentKind, Instruments};
 use mid_text_converter::song::mid::mid_to_track;
 use mid_text_converter::song::Song;
 use mid_text_converter::utils;
+use arboard::Clipboard;
 
 #[derive(Parser, Debug)]
 #[command(version)]
@@ -34,6 +35,10 @@ enum Mode {
     Merge {
         #[arg(required = true, num_args = 2..)]
         songs: Vec<String>,
+
+        /// マージした文字列をクリップボードにコピーする
+        #[arg(long)]
+        copy: bool,
     },
 }
 
@@ -76,6 +81,10 @@ struct InstArgs {
     /// 範囲外の音を範囲内のオクターブへ相対的に移動する
     #[arg(short = 'r', long, )]
     relative: bool,
+    
+    /// 作成した文字列をクリップボードにコピーする
+    #[arg(long)]
+    copy: bool,
 }
 
 macro_rules! add_instruments {
@@ -123,7 +132,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     if r.is_empty() {
                         println!("Midi file is empty");
                     } else {
-                        println!("{}", r);
+                        println!("{}", &r);
+                        if create_args.copy {
+                            let mut clipboard = Clipboard::new()?;
+                            clipboard.set_text(r)?;
+                        }
+                        
                     }
                 }
                 Err(any) => {
@@ -133,8 +147,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             Ok(())
         }
-        Some(Mode::Merge { songs }) => {
-            println!("{}", utils::merge_string(songs));
+        Some(Mode::Merge { songs, copy }) => {
+            let result = utils::merge_string(songs);
+            println!("{}", &result);
+            if *copy {
+                let mut clipboard = Clipboard::new()?;
+                clipboard.set_text(result)?;
+            }
             Ok(())
         }
         _ => {
