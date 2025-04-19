@@ -1,8 +1,8 @@
 pub fn tick_to_string(ticks: u32) -> String {
-    let mut result = String::new();
     if ticks == 0 {
         return "".to_string();
     }
+    let mut result = String::new();
     let mut remaining_ticks = ticks;
 
     while remaining_ticks >= 18 {
