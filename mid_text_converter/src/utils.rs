@@ -1,6 +1,6 @@
 pub fn tick_to_string(ticks: u32) -> String {
     if ticks == 0 {
-        return "".to_string();
+        return String::new();
     }
     let mut result = String::new();
     let mut remaining_ticks = ticks;
