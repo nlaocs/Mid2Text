@@ -33,6 +33,7 @@ enum Mode {
     #[clap(about = "複数の文字列をマージする")]
     #[clap(visible_alias = "m")]
     Merge {
+        /// マージしたい二個以上の文字列
         #[arg(required = true, num_args = 2..)]
         songs: Vec<String>,
 
